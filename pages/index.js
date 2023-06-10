@@ -1,18 +1,16 @@
 // pages/index.js
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Disclosure, Tab, Transition } from '@headlessui/react'
 import LoginDialog from '../components/LoginDialog'
+import { openLoginDialog } from '../features/loginSlice'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Home() {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const openLoginDialog = () => {
-    setIsOpen(true)
-  }
+  const dispatch = useDispatch()
+  const isOpen = useSelector((state) => state.login.isOpen)
 
   const tabNames = ["FAQ", "How to Use"]
   const tabContent = {
@@ -23,7 +21,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
       <Transition.Root show={isOpen} as="div">
-        <LoginDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+        <LoginDialog />
       </Transition.Root>
 
       <div className="text-center px-4">
@@ -67,7 +65,7 @@ export default function Home() {
           </Tab.Panels>
         </Tab.Group>
 
-        <button onClick={openLoginDialog} className="mt-6 text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2 transition-colors duration-200">
+        <button onClick={() => dispatch(openLoginDialog())} className="mt-6 text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2 transition-colors duration-200">
           Get Started
         </button>
       </div>
